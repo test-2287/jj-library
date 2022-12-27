@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+</head>
+
+<body>
+
+    <div id="app"></div>
+
+    <script type="text/x-template" id="app-template">
+        <div class="top-bar">
+            <div class="date-time">
+                <i class="icon-calender"></i>
+                <div class="time">
+                    <span>2022年12月12日</span>
+                    <span>星期三</span>
+                    <span>10:20</span>
+                </div>
+            </div>
+            <div class="page-title"></div>
+            <div class="today-weather">
+                <span class="label">今日天气</span>
+                <span class="info">晴转多云 5°-10°C</span>
+            </div>
+        </div>
+
+        <div class="charts-container">
+
+            <div class="left">
+                <arrive-chart /> 
+                <borrow-chart />
+                <applicant-chart />
+            </div>
+
+            <div class="center">
+
+                <div class="center-top">
+                    <div class="center-data">
+                        <div class="data-item">
+                            <span class="data-name item-all-books">全市藏书(册)</span>
+                            <span class="data-num" ref="centerNumber1" :data-time="time" :data-value="value1">0</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-name item-new-books">全市年新增书籍</span>
+                            <span class="data-num" ref="centerNumber2" :data-time="time" :data-value="value2">0</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-name item-all-applicants">全市办证数量</span>
+                            <span class="data-num" ref="centerNumber3" :data-time="time" :data-value="value3">0</span>
+                        </div>
+                    </div>
+                    <center-map @hightlight="hightlight" />
+                    <div class="map-data">
+                        <span class="district-data-name">{{mapDistricData.name}}图书馆</span>
+                        <div class="data-item">
+                            <span class="item-name">今日借阅册次</span>
+                            <span class="item-num">{{mapDistricData.value.bookBorrowNum}}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="item-name">今日办证人数</span>
+                            <span class="item-num">{{mapDistricData.value.applicants}}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="item-name">今日到馆人次</span>
+                            <span class="item-num">{{mapDistricData.value.enterNum}}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="item-name">馆藏图书数量</span>
+                            <span class="item-num">{{mapDistricData.value.bookNum}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="center-bottom">
+                    <div class="left">
+                        <div class="header">
+                            <span :class="{'active': bulletinActive}" style="margin-left: 93px">通知公告</span>
+                            <span :class="{'active': !bulletinActive}" style="margin-right:90px">历史上的九江</span>
+                        </div>
+                        <div :class="{'active': bulletinActive}" class="bulletin">
+                            <div class="date-title">
+                                <div class="date-box">
+                                    <span class="month">11月</span>
+                                    <span class="date">20</span>
+                                </div>
+                                <div class="title">关于开展对设区市人民政府履行教育职责督导评价满意度调查的通知</div>
+                            </div>
+                            <div class="content-box">
+                                <div class="content" ref="bulletinContent">
+                                    根据《江西省人民政府教育督导委员会关于印发〈2022年对设区市人民政府履行教育职责督导评价工作实施方案〉的通知》（赣教督委字〔2022〕6号）要求，为广泛了解社情民意，客观、公正、科学地评价设区市人民政府履行教育职责情况，经研究，决定开展设区市人民政府履行教育职责督导评价满意度调查。
+                                    根据《江西省人民政府教育督导委员会关于印发〈2022年对设区市人民政府履行教育职责督导评价工作实施方案〉的通知》（赣教督委字〔2022〕6号）要求，为广泛了解社情民意，客观、公正、科学地评价设区市人民政府履行教育职责情况，经研究，决定开展设区市人民政府履行教育职责督导评价满意度调查。
+                                </div>
+                            </div>
+                        </div>
+                        <div class="history" :class="{'active': !bulletinActive}">
+                            <div class="content" ref="historyContent">九江是国家历史文化名城， [87]
+                                一座有着2200多年历史的江南名城，地处长江、京九铁路两大经济开发带交叉点，是长江中游区域中心港口城市，是中国首批5个沿江对外开放城市之一，也是东部沿海开发向中西部推进的过渡地带，号称“三江之口，七省通衢”与“天下眉目之地”，有“江西北大门”之称。
+                                九江是国家历史文化名城， [87]
+                                一座有着2200多年历史的江南名城，地处长江、京九铁路两大经济开发带交叉点，是长江中游区域中心港口城市，是中国首批5个沿江对外开放城市之一，也是东部沿海开发向中西部推进的过渡地带，号称“三江之口，七省通衢”与“天下眉目之地”，有“江西北大门”之称。
+                            </div>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class="video">
+                            <video :src="videoArr[curVideo]" :autoplay="true" controls @ended="videoEnd"></video>
+                        </div>
+                        <span class="video-text">九江市历史宣传片</span>
+                        <span class="bullets" v-if="videoArr.length">
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="right">
+                <jiceng-borrow />
+                <book-borrow-list />
+                <new-books />
+            </div>
+
+        </div>        
+    </script>
+
+    <script type="text/x-template" id="chart-header-template">
+        <div class="chart-header">
+            <i class="header-icon"></i>
+            <span class="header-title">{{titleRef}}</span>
+        </div>
+    </script>
+
+    <script type="text/x-template" id="arrive-chart-template">
+        <div class="sub-chart-container">
+            <chart-header :title="'市馆到馆人数'"/>
+            <div class="arrive-data data-list">
+                <div class="item today-arrive">
+                    <span class="label">今日到馆</span>
+                    <span class="number">203</span>
+                </div>        
+                <div class="item now-visitor">
+                    <span class="label">目前在馆</span>
+                    <span class="number">203</span>
+                </div>
+                <div class="item month-visitor">
+                    <span class="label">本月到馆</span>
+                    <span class="number">203</span>
+                </div>
+                <div class="item year-visitor">
+                    <span class="label">全年到馆</span>
+                    <span class="number">203</span>
+                </div>
+            </div>
+            <v-chart :option="options" class="chart"/>
+        </div>
+    </script>
+
+    <script type="text/x-template" id="borrow-chart-template">
+        <div class="sub-chart-container">
+            <chart-header :title="'市馆借阅数据'"/>
+            <div class="arrive-data data-list">
+                <div class="item borrow">
+                    <span class="label">今日借阅</span>
+                    <span class="number">203</span>
+                </div>        
+                <div class="item return">
+                    <span class="label">今日还书</span>
+                    <span class="number">203</span>
+                </div>
+                <div class="item">
+                    <span class="label">本月借阅</span>
+                    <span class="number">203</span>
+                </div>
+                <div class="item">
+                    <span class="label">全年借阅</span>
+                    <span class="number">203</span>
+                </div>
+            </div>
+            <v-chart :option="options" class="chart"/>  
+        </div>
+    </script>
+
+    <script type="text/x-template" id="applicant-chart-template">
+        <div class="sub-chart-container">
+            <chart-header :title="'市馆办证人数'"/>
+            <div class="arrive-data data-list">
+                <div class="item">
+                    <span class="label">今日办证</span>
+                    <span class="number">203</span>
+                </div>        
+                <div class="item">
+                    <span class="label">本月办证</span>
+                    <span class="number">203</span>
+                </div>
+                <div class="item">
+                    <span class="label">全年办证</span>
+                    <span class="number">203</span>
+                </div>
+                <div class="item">
+                    <span class="label">全年微信粉丝</span>
+                    <span class="number">203</span>
+                </div>
+            </div>
+            <v-chart :option="options" class="chart"/>  
+        </div>
+    </script>
+
+    <script type="text/x-template" id="center-map-template">
+        <div class="map-container">
+            <v-chart class="center-map" :option="options" ref="map" @highlight="hightlight($event)"/>
+        </div>
+    </script>
+
+    <script type="text/x-template" id="jiceng-borrow-template">
+        <div class="sub-chart-container">
+            <chart-header :title="'今日基层服务点借阅统计'"/>
+
+            <div class="swiper jicengSwiper">
+                <div class="swiper-wrapper">
+
+                    <div class="swiper-slide">
+                        <div class="jiceng-list">
+
+                            <div class="jiceng-item">
+                                <div class="jiceng-name">工人文化宫</div>
+                                <div class="data-item">
+                                    <span>借阅</span>
+                                    <span>36</span>        
+                                </div>
+                                <div class="data-item">
+                                    <span>还书</span>
+                                    <span>125</span>
+                                </div>
+                            </div>
+
+                            <div class="jiceng-item">
+                                <div class="jiceng-name">工人文化宫</div>
+                                <div class="data-item">
+                                    <span>借阅</span>
+                                    <span>36</span>        
+                                </div>
+                                <div class="data-item">
+                                    <span>还书</span>
+                                    <span>125</span>
+                                </div>
+                            </div>
+
+                            <div class="jiceng-item">
+                                <div class="jiceng-name">工人文化宫</div>
+                                <div class="data-item">
+                                    <span>借阅</span>
+                                    <span>36</span>        
+                                </div>
+                                <div class="data-item">
+                                    <span>还书</span>
+                                    <span>125</span>
+                                </div>
+                            </div>
+
+                            <div class="jiceng-item">
+                                <div class="jiceng-name">工人文化宫</div>
+                                <div class="data-item">
+                                    <span>借阅</span>
+                                    <span>36</span>        
+                                </div>
+                                <div class="data-item">
+                                    <span>还书</span>
+                                    <span>125</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+
+                    <div class="swiper-slide">
+                        <div class="jiceng-list">
+                            
+                            <div class="jiceng-item">
+                                <div class="jiceng-name">工人文化宫</div>
+                                <div class="data-item">
+                                    <span>借阅</span>
+                                    <span>36</span>        
+                                </div>
+                                <div class="data-item">
+                                    <span>还书</span>
+                                    <span>125</span>
+                                </div>
+                            </div>
+
+                            <div class="jiceng-item">
+                                <div class="jiceng-name">工人文化宫</div>
+                                <div class="data-item">
+                                    <span>借阅</span>
+                                    <span>36</span>        
+                                </div>
+                                <div class="data-item">
+                                    <span>还书</span>
+                                    <span>125</span>
+                                </div>
+                            </div>
+
+                            <div class="jiceng-item">
+                                <div class="jiceng-name">工人文化宫</div>
+                                <div class="data-item">
+                                    <span>借阅</span>
+                                    <span>36</span>        
+                                </div>
+                                <div class="data-item">
+                                    <span>还书</span>
+                                    <span>125</span>
+                                </div>
+                            </div>
+
+                            <div class="jiceng-item">
+                                <div class="jiceng-name">工人文化宫</div>
+                                <div class="data-item">
+                                    <span>借阅</span>
+                                    <span>36</span>        
+                                </div>
+                                <div class="data-item">
+                                    <span>还书</span>
+                                    <span>125</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+
+                    <div class="swiper-slide">
+                        <div class="jiceng-list">
+                            
+                            <div class="jiceng-item">
+                                <div class="jiceng-name">工人文化宫</div>
+                                <div class="data-item">
+                                    <span>借阅</span>
+                                    <span>36</span>        
+                                </div>
+                                <div class="data-item">
+                                    <span>还书</span>
+                                    <span>125</span>
+                                </div>
+                            </div>
+
+                            <div class="jiceng-item">
+                                <div class="jiceng-name">工人文化宫</div>
+                                <div class="data-item">
+                                    <span>借阅</span>
+                                    <span>36</span>        
+                                </div>
+                                <div class="data-item">
+                                    <span>还书</span>
+                                    <span>125</span>
+                                </div>
+                            </div>
+
+                            <div class="jiceng-item">
+                                <div class="jiceng-name">工人文化宫</div>
+                                <div class="data-item">
+                                    <span>借阅</span>
+                                    <span>36</span>        
+                                </div>
+                                <div class="data-item">
+                                    <span>还书</span>
+                                    <span>125</span>
+                                </div>
+                            </div>
+
+                            <div class="jiceng-item">
+                                <div class="jiceng-name">工人文化宫</div>
+                                <div class="data-item">
+                                    <span>借阅</span>
+                                    <span>36</span>        
+                                </div>
+                                <div class="data-item">
+                                    <span>还书</span>
+                                    <span>125</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <!-- swiper slide -->
+                </div>
+                <!-- swiper wrapper -->
+                <div class="swiper-pagination"></div>
+            </div>
+            <!-- swiper -->
+        </div>
+    </script>
+
+    <script type="text/x-template" id="book-borrow-list-template">
+        <div class="sub-chart-container">
+            <chart-header :title="'本月图书借阅排行榜'"/>
+            <div class="borrow-list">
+            
+            <div class="swiper bookBorrowListSwiper">
+                <div class="swiper-wrapper">
+    
+                    <div class="swiper-slide">
+                        <div class="list-item">
+                            <div class="item-left">
+                                <div class="icon" style="background-image: url('./assets/list-orange.png');">
+                                    <span :style="'background: linear-gradient(180deg, #FFFFFF 37.04%, #FF5823 100%);-webkit-background-clip: text;background-clip: text;'">1</span>
+                                </div>
+                                <span class="book-name">存在主义咖啡馆 : 自由、存在和杏子鸡尾酒</span>
+                            </div>
+                            <div class="item-right">
+                                <span>借阅</span>
+                                <span>99</span>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="swiper-slide">
+                        <div class="list-item">
+                            <div class="item-left">
+                                <div class="icon" style="background-image:url('./assets/list-orange.png')">
+                                    <span :style="'background: linear-gradient(180deg, #FFFFFF 37.04%, #FF5823 100%);-webkit-background-clip: text;background-clip: text;'">2</span>
+                                </div>
+                                <span class="book-name">存在主义咖啡馆 : 自由、存在和杏子鸡尾酒</span>
+                            </div>
+                            <div class="item-right">
+                                <span>借阅</span>
+                                <span>99</span>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="swiper-slide">
+                        <div class="list-item">
+                            <div class="item-left">
+                                <div class="icon" style="background-image: url('./assets/list-orange.png')">
+                                    <span :style="'background: linear-gradient(180deg, #FFFFFF 37.04%, #FF5823 100%);-webkit-background-clip: text;background-clip: text;'">3</span>
+                                </div>
+                                <span class="book-name">存在主义咖啡馆 : 自由、存在和杏子鸡尾酒</span>
+                            </div>
+                            <div class="item-right">
+                                <span>借阅</span>
+                                <span>99</span>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="swiper-slide">
+                        <div class="list-item">
+                            <div class="item-left">
+                                <div class="icon">
+                                    <span>4</span>
+                                </div>
+                                <span class="book-name">存在主义咖啡馆 : 自由、存在和杏子鸡尾酒</span>
+                            </div>
+                            <div class="item-right">
+                                <span>借阅</span>
+                                <span>99</span>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="swiper-slide">
+                        <div class="list-item">
+                            <div class="item-left">
+                                <div class="icon">
+                                    <span>5</span>
+                                </div>
+                                <span class="book-name">存在主义咖啡馆 : 自由、存在和杏子鸡尾酒</span>
+                            </div>
+                            <div class="item-right">
+                                <span>借阅</span>
+                                <span>99</span>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="swiper-slide">
+                        <div class="list-item">
+                            <div class="item-left">
+                                <div class="icon">
+                                    <span>6</span>
+                                </div>
+                                <span class="book-name">存在主义咖啡馆 : 自由、存在和杏子鸡尾酒</span>
+                            </div>
+                            <div class="item-right">
+                                <span>借阅</span>
+                                <span>99</span>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="swiper-slide">
+                        <div class="list-item">
+                            <div class="item-left">
+                                <div class="icon">
+                                    <span>7</span>
+                                </div>
+                                <span class="book-name">存在主义咖啡馆 : 自由、存在和杏子鸡尾酒</span>
+                            </div>
+                            <div class="item-right">
+                                <span>借阅</span>
+                                <span>99</span>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="swiper-slide">
+                        <div class="list-item">
+                            <div class="item-left">
+                                <div class="icon">
+                                    <span>8</span>
+                                </div>
+                                <span class="book-name">存在主义咖啡馆 : 自由、存在和杏子鸡尾酒</span>
+                            </div>
+                            <div class="item-right">
+                                <span>借阅</span>
+                                <span>99</span>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="swiper-slide">
+                        <div class="list-item">
+                            <div class="item-left">
+                                <div class="icon">
+                                    <span>9</span>
+                                </div>
+                                <span class="book-name">存在主义咖啡馆 : 自由、存在和杏子鸡尾酒</span>
+                            </div>
+                            <div class="item-right">
+                                <span>借阅</span>
+                                <span>99</span>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="swiper-slide">
+                        <div class="list-item">
+                            <div class="item-left">
+                                <div class="icon">
+                                    <span>10</span>
+                                </div>
+                                <span class="book-name">存在主义咖啡馆 : 自由、存在和杏子鸡尾酒</span>
+                            </div>
+                            <div class="item-right">
+                                <span>借阅</span>
+                                <span>99</span>
+                            </div>
+                        </div>
+                    </div>
+    
+                </div>
+                <!-- swiper wrapper -->
+            </div>
+            <!-- swiper -->
+            </div>
+            <!-- borrow list -->
+        </div>
+    </script>
+
+    <script type="text/x-template" id="new-books-template">
+        <div class="sub-chart-container">
+            <chart-header :title="'新书推荐'"/>
+            <div class="new-books-list">
+                
+                <div class="swiper newBooksSwiper">
+                    <div class="swiper-wrapper">
+    
+                    <div class="swiper-slide">
+                        <div class="new-book-item">
+                            <div class="book-image">
+                                <img src="./assets/book-bofuwa.png" alt="">
+                            </div>
+                            <span class="book-name">成为波伏娃</span>
+                            <span class="book-author">
+                                [英]凯特·柯克帕特..
+                                <br>
+                                中信出版社
+                            </span>
+                        </div>
+                    </div>
+    
+                    <div class="swiper-slide">
+                        <div class="new-book-item">
+                            <div class="book-image">
+                                <img src="./assets/book-bofuwa.png" alt="" />
+                            </div>
+                            <span class="book-name">成为波伏娃</span>
+                            <span class="book-author">
+                                [英]凯特·柯克帕特..
+                                <br>
+                                中信出版社
+                            </span>
+                        </div>
+                    </div>
+    
+                    <div class="swiper-slide">
+                        <div class="new-book-item">
+                            <div class="book-image">
+                                <img src="./assets/book-bofuwa.png" alt="" />
+                            </div>
+                            <span class="book-name">成为波伏娃</span>
+                            <span class="book-author">
+                                [英]凯特·柯克帕特..
+                                <br>
+                                中信出版社
+                            </span>
+                        </div>
+                    </div>
+    
+                    <div class="swiper-slide">
+                        <div class="new-book-item">
+                            <div class="book-image">
+                                <img src="./assets/book-hamelton.png" alt="">
+                            </div>
+                            <span class="book-name">成为波伏娃</span>
+                            <span class="book-author">
+                                [英]凯特·柯克帕特..
+                                <br>
+                                中信出版社
+                            </span>
+                        </div>
+                    </div>
+    
+                    <div class="swiper-slide">
+                        <div class="new-book-item">
+                            <div class="book-image">
+                                <img src="./assets/book-hamelton.png" alt="" />
+                            </div>
+                            <span class="book-name">成为波伏娃</span>
+                            <span class="book-author">
+                                [英]凯特·柯克帕特..
+                                <br>
+                                中信出版社
+                            </span>
+                        </div>
+                    </div>
+    
+                    <div class="swiper-slide">
+                        <div class="new-book-item">
+                            <div class="book-image">
+                                <img src="./assets/book-hamelton.png" alt="" />
+                            </div>
+                            <span class="book-name">成为波伏娃</span>
+                            <span class="book-author">
+                                [英]凯特·柯克帕特..
+                                <br>
+                                中信出版社
+                            </span>
+                        </div>
+                    </div>
+    
+                    <div class="swiper-slide">
+                        <div class="new-book-item">
+                            <div class="book-image">
+                                <img src="./assets/book-maboyong.png" alt="">
+                            </div>
+                            <span class="book-name">成为波伏娃</span>
+                            <span class="book-author">
+                                [英]凯特·柯克帕特..
+                                <br>
+                                中信出版社
+                            </span>
+                        </div>
+                    </div>
+    
+                    <div class="swiper-slide">
+                        <div class="new-book-item">
+                            <div class="book-image">
+                                <img src="./assets/book-maboyong.png" alt="" />
+                            </div>
+                            <span class="book-name">成为波伏娃</span>
+                            <span class="book-author">
+                                [英]凯特·柯克帕特..
+                                <br>
+                                中信出版社
+                            </span>
+                        </div>
+                    </div>
+    
+                    <div class="swiper-slide">
+                        <div class="new-book-item">
+                            <div class="book-image">
+                                <img src="./assets/book-maboyong.png" alt="" />
+                            </div>
+                            <span class="book-name">成为波伏娃</span>
+                            <span class="book-author">
+                                [英]凯特·柯克帕特..
+                                <br>
+                                中信出版社
+                            </span>
+                        </div>
+                    </div>
+    
+                    </div>
+                    <!-- swipper wrapper -->
+                </div>
+                <!-- swiper  -->
+            </div>
+        </div>
+    </script>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.1/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-echarts@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+    <script src="./js/index.js"></script>
+</body>
+
+</html>

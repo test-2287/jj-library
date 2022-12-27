@@ -1,0 +1,205 @@
+.charts-container {
+    box-sizing: border-box;
+    padding: 0 30px;
+    padding-bottom: 30px;
+    height: calc(100% - 103px);
+    display: flex;
+
+    .left,
+    .right {
+        /* width: calc((100% - 3*24px) / 4); */
+        box-sizing: border-box;
+        width: 447px;
+        height: 100%;
+        margin-top: -3px;
+        padding: 12px;
+        padding-bottom: 17px;
+        background: rgba(0, 2, 24, 0.6);
+    }
+
+    .center {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        display: flex;
+
+        .center-top {
+            position: relative;
+            flex: 1;
+        }
+
+        .center-bottom {
+            width: 100%;
+            height: 307px;
+            align-self: flex-end;
+            display: flex;
+            justify-content: space-evenly;
+            /* padding: 0 24px; */
+            padding-top: 23px;
+
+            /* box-sizing: border-box; */
+            .left {
+                /* margin-right: 24px; */
+                padding-bottom: 24px;
+
+                .header {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    height: 36px;
+                    margin-bottom: 15px;
+
+                    >span {
+                        background: linear-gradient(270deg, rgba(0, 10, 86, 0) 2.08%, #000A56 20.83%, #000A56 48.44%, #000A56 81.77%, rgba(0, 10, 86, 0) 100%);
+                        font-weight: 900;
+                        font-size: 18px;
+                        line-height: 25px;
+                        background: linear-gradient(180deg, rgba(74, 142, 255, 0) 0%, rgba(74, 142, 255, 0.2) 100%), #182AAC;
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                        background-clip: text;
+                        text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.25);
+
+                        position: relative;
+
+                        &.active {
+                            background: linear-gradient(180deg, #FFFFFF 11.11%, #4AB0F7 100%);
+                            -webkit-background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                            background-clip: text;
+
+                            &::before,
+                            &::after {
+                                content: '';
+                                width: 5px;
+                                height: 5px;
+                                border: 1px solid #4A8EFF;
+                                transform: rotate(-45deg);
+                                position: absolute;
+                                top: 50%;
+                                transform: rotate(-45deg) translateY(-100%);
+                            }
+
+                            &::before {
+                                left: -17px;
+                            }
+
+                            &::after {
+                                right: -24px
+                            }
+                        }
+                    }
+                }
+
+                .bulletin {
+                    .date-title {
+                        margin-bottom: 13px;
+                        display: flex;
+
+                        .date-box {
+                            flex-shrink: 0;
+                            margin-right: 14px;
+                            width: 50px;
+                            height: 50px;
+                            background: rgba(48, 100, 232, 0.2);
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            color: #3064E8;
+
+                            .month {
+                                font-size: 12px;
+                                line-height: 24px;
+                            }
+
+                            .date {
+                                font-size: 24px;
+                                line-height: 24px;
+                                font-weight: 700;
+                            }
+                        }
+
+                        .title {
+                            color: #3064E8;
+                            font-weight: 700;
+                            font-size: 16px;
+                            line-height: 24px;
+                        }
+                    }
+
+                }
+
+                .bulletin,
+                .history {
+                    display: none;
+
+                    &.active {
+                        display: block;
+                    }
+                }
+
+                .content {
+                    padding: 0 12px;
+                    font-family: 'Microsoft YaHei';
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 24px;
+                    color: #AFC4F9;
+                }
+
+                .bulletin .content-box {
+                    height: 150px;
+                    max-height: 150px;
+                    overflow: scroll;
+                    scrollbar-width: none;
+                    transition: all .1s ease-in-out;
+
+                    &::-webkit-scrollbar {
+                        display: none
+                    }
+                }
+
+                .history {
+                    height: 200px;
+                    max-height: 200px;
+                    overflow: scroll;
+                    scrollbar-width: none;
+                    transition: all .1s ease-in-out;
+
+                    &::-webkit-scrollbar {
+                        display: none
+                    }
+
+                    .content {
+                        text-indent: 30px;
+                    }
+                }
+            }
+
+            .right {
+                padding: 24px 18px 33px;
+                position: relative;
+
+                .video {
+                    height: 220px;
+
+                    video {
+                        width: 100%;
+                        height: 220px;
+                    }
+                }
+
+                .video-text {
+                    position: absolute;
+                    left: 19px;
+                    bottom: 33px;
+                    font-family: 'Microsoft YaHei';
+                    font-size: 14px;
+                    line-height: 18px;
+                    color: #FFFFFF;
+                }
+            }
+        }
+    }
+}

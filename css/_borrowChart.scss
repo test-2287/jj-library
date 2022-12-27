@@ -1,0 +1,21 @@
+.data-list {
+    .item.borrow .label::after {
+        margin-left: 10px;
+        margin-top: -2px;
+        content: '';
+        width: 10px;
+        height: 10px;
+        background-color: #3064E8;
+        border-radius: 50%;
+    }
+
+    .item.return .label::after {
+        margin-left: 10px;
+        margin-top: -2px;
+        content: '';
+        width: 10px;
+        height: 10px;
+        background-color: #D26A0E;
+        border-radius: 50%;
+    }
+}

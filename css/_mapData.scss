@@ -1,0 +1,59 @@
+.map-data {
+    position: absolute;
+    box-sizing: border-box;
+    width: 447px;
+    height: 140px;
+    background-image: url('/map-info-bg.png');
+    background-size: cover;
+    right: 24px;
+    bottom: 0;
+    padding: 15px 30px 28px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 37px;
+
+    .district-data-name {
+        position: absolute;
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 32px;
+        /* text-align: right; */
+        color: #FFFFFF;
+        right: 6px;
+        top: -47px;
+    }
+
+    .data-item {
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(74, 142, 255, 0.3);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+
+        &::after {
+            position: absolute;
+            width: 5px;
+            height: 1px;
+            background-color: #4A8EFF;
+            bottom: 0;
+            left: 0;
+            content: '';
+        }
+
+        .item-name {
+            font-weight: 700;
+            font-size: 14px;
+            line-height: 18px;
+            color: #3064E8;
+        }
+
+        .item-num {
+            font-weight: 700;
+            font-size: 18px;
+            line-height: 24px;
+            text-align: right;
+            color: #FFFFFF;
+        }
+    }
+}

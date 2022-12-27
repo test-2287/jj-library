@@ -1,0 +1,28 @@
+#app {
+    width: 1920px;
+    height: 1080px;
+    background-color: #061B7F;
+    background: url('/background.svg') no-repeat;
+    background-size: cover;
+    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+}
+
+@import './topbar.scss';
+@import './chartsContainer.scss';
+@import './subChartContainer.scss';
+@import './mapData.scss';
+@import './centerData.scss';
+@import './centerMap.scss';
+
+.chart{
+    width: 406px;
+    height: 190px;
+    padding: 0 8px;
+}
+@import './chartHeader.scss';
+@import './borrowChart.scss';
+
+@import './jicengBorrow.scss';
+@import './bookBorrowList.scss';
+@import './newBooks.scss';
+

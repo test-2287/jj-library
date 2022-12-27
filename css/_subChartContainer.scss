@@ -1,0 +1,51 @@
+.sub-chart-container {
+    margin-bottom: 24px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.sub-chart-container .data-list {
+    padding-top: 15px;
+    display: flex;
+
+    .item {
+        flex: 1;
+        padding-left: 10px;
+        /* padding-bottom: 4px; */
+        /* margin-top: -5px; */
+        border-left: 1px solid rgba(74, 142, 255, 0.3);
+        position: relative;
+        color: #3064E8;
+        font-size: 14px;
+        display: flex;
+        flex-direction: column;
+
+        &::after {
+            position: absolute;
+            width: 2px;
+            height: 4px;
+            background-color: #4A8EFF;
+            content: '';
+            top: 0;
+            left: -1px;
+        }
+    }
+
+    .label {
+        color: #3064E8;
+        font-size: 14px;
+        line-height: 18px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 2px;
+    }
+
+    .number {
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 26px;
+        color: #fff;
+    }
+}
